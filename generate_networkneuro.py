@@ -101,10 +101,10 @@ def generate_networkneuro():
 		
 		# grab weights
 		tmp['weights'] = {}
-		tmp['weights']['density'] = conmats_dict['conmat_density'][ridx1-1][ridx2-1]
+		tmp['weights']['density'] = conmats_dict['density'][ridx1-1][ridx2-1]
 		tmp['weights']['count'] = len(st_ind)
-		tmp['weights']['length'] = conmats_dict['conmat_length'][ridx1-1][ridx2-1]
-		tmp['weights']['denlen'] = conmats_dict['conmat_denlen'][ridx1-1][ridx2-1]
+		tmp['weights']['length'] = conmats_dict['length'][ridx1-1][ridx2-1]
+		tmp['weights']['denlen'] = conmats_dict['denlen'][ridx1-1][ridx2-1]
 
 		## grab streamlines
 		coords[jj-1] = {}
