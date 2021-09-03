@@ -1,0 +1,43 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=4,vmem=32gb
+#PBS -l walltime=1:00:00
+#PBS -N generate-networkneuro
+
+raw_mat=`jq -r '.raw_mat' config.json`
+raw_netmat=`jq -r '.raw_netmat' config.json`
+
+# make outdir if not already made
+[ ! -d netneuro ] && mkdir -p netneuro netneuro/output netneuro/surfaces netneuro/roipairs
+
+# needed to identify which raw datatype to use grab assignment info
+if [ ! -z ${raw_mat} ] && [ ! -z ${raw_netmat} ]; then
+	echo "both exists. using python to generate networkneuro"
+	soft_lan="python3"
+	[ ! -f assignments.csv ] && cp -v ${raw_netmat}/assignments.csv ./assignments.csv && edge_info="assignments.csv"
+
+	# run function in pytyhon 
+	time singularity exec -e docker://brainlife/dipy:1.14.0 generate_networkneuro.py
+elif [ ${raw_mat} ] && [ -z ${raw_netmat} ]; then
+	echo "important datatype is missing. please input a raw datatype that includes edge assignment information"
+	exit 1
+elif [ -z ${raw_mat} ]; then
+	echo "using matlab to generate networkneuro"
+	soft_lan="matlab"
+	[ ! -f netw.mat ] && cp -v ${raw_mat}/netw.mat ./netw.mat && edge_info="netw.mat"
+
+	# run function in matlab 
+	time singularity exec -e docker://brainlife/mcr:r2019a ./compiled/generate_networkneuro
+elif [ -z ${raw_netmat} ]; then
+	echo "using python to generate networkneuro"
+	soft_lan="python3"
+	[ ! -f assignments.csv ] && cp -v ${raw_netmat}/assignments.csv ./assignments.csv && edge_info="assignments.csv"
+
+	# run function in pytyhon 
+	time singularity exec -e docker://brainlife/dipy:1.14.0 generate_networkneuro.py
+fi
+
+# generate visualization of parcellation
+[ ! -f netneuro/surfaces/index.json ] && time singularity exec -e docker://brainlife/pythonvtk:1.1 ./rois2vtks.py
+
+# copy conmats to netneuro/outputs
+

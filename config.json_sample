@@ -1,0 +1,9 @@
+{
+	"parc":	"/home/brad/Desktop/network-neuro-gen/parc.nii.gz",
+	"label":	"/home/brad/Desktop/network-neuro-gen/label.json",
+	"track":	"/home/brad/Desktop/network-neuro-gen/track.tck",
+	"conmat_length":	"/home/brad/Desktop/network-neuro-gen/conmat_length/csv/length.csv",
+	"conmat_density":	"/home/brad/Desktop/network-neuro-gen/conmat_density/csv/density.csv",
+	"conmat_denlen":	"/home/brad/Desktop/network-neuro-gen/conmat_denlen/csv/denlen.csv",
+	"conmat_count":	"/home/brad/Desktop/network-neuro-gen/conmat_count/csv/count.csv"
+}
