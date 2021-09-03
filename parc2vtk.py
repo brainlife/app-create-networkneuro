@@ -48,7 +48,7 @@ for label in labels:
     label["color"]["g"] = np.random.randint(255)
     label["color"]["b"] = np.random.randint(255)
     label['name'] = label['name']
-    label['label'] = label['voxel_value']
+    label['label'] = str(label['voxel_value'])
     print(surf_name)
 
     index.append(label)
