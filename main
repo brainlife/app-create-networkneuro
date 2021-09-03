@@ -9,11 +9,6 @@ set -e
 
 raw_mat=`jq -r '.raw_mat' config.json`
 raw_netmat=`jq -r '.raw_netmat' config.json`
-conmat_length=`jq -r '.conmat_length' config.json`
-conmat_density=`jq -r '.conmat_density' config.json`
-conmat_count=`jq -r '.conmat_count' config.json`
-conmat_denlen=`jq -r '.conmat_denlen' config.json`
-conmats="conmat_length conmat_density conmat_count conmat_denlen"
 
 # make outdir if not already made
 [ ! -d netneuro ] && mkdir -p netneuro netneuro/output netneuro/surfaces netneuro/roipairs
