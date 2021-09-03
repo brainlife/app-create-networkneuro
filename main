@@ -59,6 +59,7 @@ if [ ! -f netneuro/roipairs/index.json ]; then
 else
 	echo "netneuro datatype generated!"
 	rm -rf *.csv *.nii.gz
+	cp netneuro/surfaces/index.json netneuro/labels.json
 	exit 0
 fi
 
