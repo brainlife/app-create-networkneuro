@@ -3,6 +3,10 @@
 #PBS -l walltime=1:00:00
 #PBS -N generate-networkneuro
 
+set -x
+set -e
+
+
 raw_mat=`jq -r '.raw_mat' config.json`
 raw_netmat=`jq -r '.raw_netmat' config.json`
 conmat_length=`jq -r '.conmat_length' config.json`
