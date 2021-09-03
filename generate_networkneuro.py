@@ -3,7 +3,6 @@
 ###### this is a python port of fnEdgesToJson.m function from the FINE toolbox developed by Brent McPherson (IU 2021)
 ###### the intended usecase for this function is to be paired with an assignments.csv file provided by mrtrix3's tck2connectome function
 
-import vtk
 import sys
 import os
 import json
@@ -11,8 +10,7 @@ import pandas as pd
 import numpy as np
 import nibabel as nib
 from dipy.io.streamline import load_tractogram
-from itertools import chain
-
+	
 def generate_networkneuro():
 
 	# load config
@@ -26,7 +24,7 @@ def generate_networkneuro():
 
 	# set and make output dir
 	outdir = './netneuro/roipairs/'
-	if ~os.path.isdir(outdir):
+	if not os.path.isdir(outdir):
 		os.mkdir(outdir)
 	print('top variables loaded')
 
@@ -54,10 +52,10 @@ def generate_networkneuro():
 
 	# load conmats
 	print('loading conmats')
-	conmats = ['conmat_count','conmat_len','conmat_den','conmat_denlen']
+	conmats = ['conmat_count','conmat_length','conmat_density','conmat_denlen']
 	conmats_dict = {}
 	for i in conmats:
-		conmats_dict[i] = np.load(config[i])
+		conmats_dict[i] = pd.read_csv(config[i],header=None).values
 	print('conmats loaded')
 
 	# load wholebrain tractogram in parc space

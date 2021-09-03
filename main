@@ -1,43 +1,65 @@
 #!/bin/bash
-#PBS -l nodes=1:ppn=4,vmem=32gb
+#PBS -l nodes=1:ppn=4,vmem=40gb
 #PBS -l walltime=1:00:00
 #PBS -N generate-networkneuro
 
 raw_mat=`jq -r '.raw_mat' config.json`
 raw_netmat=`jq -r '.raw_netmat' config.json`
+conmat_length=`jq -r '.conmat_length' config.json`
+conmat_density=`jq -r '.conmat_density' config.json`
+conmat_count=`jq -r '.conmat_count' config.json`
+conmat_denlen=`jq -r '.conmat_denlen' config.json`
+conmats="conmat_length conmat_density conmat_count conmat_denlen"
 
 # make outdir if not already made
 [ ! -d netneuro ] && mkdir -p netneuro netneuro/output netneuro/surfaces netneuro/roipairs
 
 # needed to identify which raw datatype to use grab assignment info
-if [ ! -z ${raw_mat} ] && [ ! -z ${raw_netmat} ]; then
+if [[ ! ${raw_mat} == 'null' ]] && [[ ! ${raw_netmat} == 'null' ]]; then
 	echo "both exists. using python to generate networkneuro"
 	soft_lan="python3"
 	[ ! -f assignments.csv ] && cp -v ${raw_netmat}/assignments.csv ./assignments.csv && edge_info="assignments.csv"
 
-	# run function in pytyhon 
-	time singularity exec -e docker://brainlife/dipy:1.14.0 generate_networkneuro.py
-elif [ ${raw_mat} ] && [ -z ${raw_netmat} ]; then
+	# # run function in pytyhon 
+	time singularity exec -e docker://brainlife/dipy:1.4.0 ./generate_networkneuro.py
+elif [[ ${raw_mat} == 'null' ]] && [[ ${raw_netmat} == 'null' ]]; then
 	echo "important datatype is missing. please input a raw datatype that includes edge assignment information"
-	exit 1
-elif [ -z ${raw_mat} ]; then
+	# exit 1
+elif [[ ! ${raw_mat} == 'null' ]] && [[ ${raw_netmat} == 'null' ]]; then
 	echo "using matlab to generate networkneuro"
 	soft_lan="matlab"
 	[ ! -f netw.mat ] && cp -v ${raw_mat}/netw.mat ./netw.mat && edge_info="netw.mat"
 
-	# run function in matlab 
+	# # run function in matlab 
 	time singularity exec -e docker://brainlife/mcr:r2019a ./compiled/generate_networkneuro
-elif [ -z ${raw_netmat} ]; then
+elif [[ ${raw_mat} == 'null' ]] && [[ ! ${raw_netmat} == 'null' ]]; then
 	echo "using python to generate networkneuro"
 	soft_lan="python3"
 	[ ! -f assignments.csv ] && cp -v ${raw_netmat}/assignments.csv ./assignments.csv && edge_info="assignments.csv"
 
-	# run function in pytyhon 
-	time singularity exec -e docker://brainlife/dipy:1.14.0 generate_networkneuro.py
+	# # run function in pytyhon 
+	time singularity exec -e docker://brainlife/dipy:1.4.0 ./generate_networkneuro.py
 fi
 
 # generate visualization of parcellation
 [ ! -f netneuro/surfaces/index.json ] && time singularity exec -e docker://brainlife/pythonvtk:1.1 ./rois2vtks.py
 
 # copy conmats to netneuro/outputs
+for i in ${conmats}
+do
+	if [ ! -f netneuro/output/${i%%conmat_}.csv ]; then
+		cm=$(eval "echo \$${i}")
+		cp -v ${cm} ./netneuro/output/${i%%conmat_}.csv
+	fi
+done
+
+if [ ! -f netneuro/roipairs/index.json ]; then
+	echo "something went wrong. check derivatives"
+	exit 1
+else
+	echo "netneuro datatype generated!"
+	rm -rf *.csv *.nii.gz
+	exit 0
+fi
+
 
