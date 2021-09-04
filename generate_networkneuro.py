@@ -74,7 +74,6 @@ def generate_networkneuro():
 	print('tractogram loaded')
 
 	# loop through edges and generate structure
-	ii = 0
 	jj = 1
 	count = 1
 	jout = {}
@@ -133,7 +132,6 @@ def generate_networkneuro():
 		tmp['filename'] = tname
 		tmp['idx'] = jj-1
 		jj = jj+1
-		ii = ii+1
 		jout['roi_pairs'] = jout['roi_pairs'] + [ tmp ]
 		ofib.append(coords)
 	print('networkneuro data structures built')
@@ -141,10 +139,19 @@ def generate_networkneuro():
 	## writing out json outputs
 	# for every collection of 50 files
 	print('saving outputs')
+	jj = 1
+	count = 1
 	for i in range(1,len(ofib)+1):
-		tname = 'conn_'+str(i)+'.json'
+		if jj > 50:
+			# iterate the object / reset the count
+			count = count + 1
+			jj = 1
+			coords = []
+
+		tname = 'conn_'+str(count)+'.json'
 		with open(outdir+'/'+tname,'w') as out_f:
 			json.dump(ofib[i-1],out_f)
+		jj = jj+1
 
 	# total index
 	with open(outdir+'/index.json','w') as out_f:
