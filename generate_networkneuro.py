@@ -71,8 +71,8 @@ def generate_networkneuro():
 	count = 1
 	jout = {}
 	jout['roi_pairs'] = []
-	ofib = {}
-	coords = []
+	ofib = [[]]
+	coords = [[]]
 
 	print('building networkneuro data structures')
 	for i in unique_edges:
@@ -111,12 +111,12 @@ def generate_networkneuro():
 		tcoord = wholebrain.streamlines[st_ind.index.tolist()]
 
 		# output coords in nested structure and round to 2 decimal places
-		coords_kk = []
 		for kk in range(len(tcoord)):
-			coords_kk = coords_kk + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
+			coords[jj-1].insert(kk,np.transpose(np.round(tcoord[kk],2).tolist()).tolist())
+			# coords_kk = coords_kk + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
 			# coords[jj-1][kk] = np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
 		# coords = coords + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
-		coords = coords + coords_kk
+		# coords = coords + coords_kk
 
 		# create filename to store streamline data
 		tname = 'conn_'+str(count)+'.json'
@@ -127,7 +127,7 @@ def generate_networkneuro():
 		jj = jj+1
 		ii = ii+1
 		jout['roi_pairs'] = jout['roi_pairs'] + [ tmp ]
-		ofib[count-1] = coords
+		ofib[count-1].insert(coords)
 	print('networkneuro data structures built')
 
 	## writing out json outputs
