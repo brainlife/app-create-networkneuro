@@ -51,10 +51,10 @@ def generate_networkneuro():
 	unique_edges = []
 	for f in range(len(unique_edges_ordered)):
 		if f == 0:
-			unique_edges.append(list(uniqued_edges_ordered[f]))
+			unique_edges.append(list(unique_edges_ordered[f]))
 		else:
-			if list(uniqued_edges_ordered[f]) not in unique_edges:
-				unique_edges.append(list(uniqued_edges_ordered[f]))
+			if list(unique_edges_ordered[f]) not in unique_edges:
+				unique_edges.append(list(unique_edges_ordered[f]))
 	unique_edges = np.sort(unique_edges)
 	print('node information loaded')
 
