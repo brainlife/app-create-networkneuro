@@ -72,7 +72,7 @@ def generate_networkneuro():
 	jout = {}
 	jout['roi_pairs'] = []
 	ofib = {}
-	coords = {}
+	coords = []
 
 	print('building networkneuro data structures')
 	for i in unique_edges:
@@ -85,7 +85,7 @@ def generate_networkneuro():
 			# iterate the object / reset the count
 			count = count + 1
 			jj = 1
-			coords = {}
+			coords = []
 
 		if jj == 1:
 			print(str(count))
@@ -107,12 +107,13 @@ def generate_networkneuro():
 		tmp['weights']['denlen'] = conmats_dict['denlen'][ridx1-1][ridx2-1]
 
 		## grab streamlines
-		coords[jj-1] = {}
+		# coords = {}
 		tcoord = wholebrain.streamlines[st_ind.index.tolist()]
 
 		# output coords in nested structure and round to 2 decimal places
 		for kk in range(len(tcoord)):
-			coords[jj-1][kk] = np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
+			# coords[jj-1][kk] = np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
+			coords = coords + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
 
 		# create filename to store streamline data
 		tname = 'conn_'+str(count)+'.json'
