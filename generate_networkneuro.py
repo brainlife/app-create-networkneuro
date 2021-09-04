@@ -85,7 +85,7 @@ def generate_networkneuro():
 			# iterate the object / reset the count
 			count = count + 1
 			jj = 1
-			coords = []
+			coords = [[]]
 
 		if jj == 1:
 			print(str(count))
