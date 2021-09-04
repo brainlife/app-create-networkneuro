@@ -127,7 +127,7 @@ def generate_networkneuro():
 		jj = jj+1
 		ii = ii+1
 		jout['roi_pairs'] = jout['roi_pairs'] + [ tmp ]
-		ofib[count-1].insert(coords)
+		ofib[count-1].append(coords)
 	print('networkneuro data structures built')
 
 	## writing out json outputs
