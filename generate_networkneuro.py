@@ -49,7 +49,7 @@ def generate_networkneuro():
 	unique_edges_unclean = assignments.groupby(['pair1','pair2']).count().index.values
 	unique_edges_ordered = np.sort([ (f[1],f[0]) if f[0] > f[1] else f for f in unique_edges_unclean ])
 	unique_edges = []
-	for i in range(len(unique_edges_ordered)):
+	for f in range(len(unique_edges_ordered)):
 		if f == 0:
 			unique_edges.append(list(uniqued_edges_ordered[f]))
 		else:
