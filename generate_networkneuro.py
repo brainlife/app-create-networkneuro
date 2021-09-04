@@ -111,9 +111,12 @@ def generate_networkneuro():
 		tcoord = wholebrain.streamlines[st_ind.index.tolist()]
 
 		# output coords in nested structure and round to 2 decimal places
+		coords_kk = []
 		for kk in range(len(tcoord)):
+			coords_kk = coords_kk + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
 			# coords[jj-1][kk] = np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
-			coords = coords + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
+		# coords = coords + np.transpose(np.round(tcoord[kk],2).tolist()).tolist()
+		coords = coords + coords_kk
 
 		# create filename to store streamline data
 		tname = 'conn_'+str(count)+'.json'
