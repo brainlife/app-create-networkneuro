@@ -96,8 +96,8 @@ def generate_networkneuro():
 
 		# store node names
 		tmp = {}
-		tmp['roi1'] = [label_names[ridx1-1]]
-		tmp['roi2'] = [label_names[ridx2-1]]
+		tmp['roi1'] = str(ridx1)
+		tmp['roi2'] = str(ridx2)
 		
 		# grab weights
 		tmp['weights'] = {}
