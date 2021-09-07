@@ -141,16 +141,19 @@ def generate_networkneuro():
 	print('saving outputs')
 	jj = 1
 	count = 1
+	coords = []
 	for i in range(1,len(ofib)+1):
 		if jj > 50:
 			# iterate the object / reset the count
 			count = count + 1
 			jj = 1
 			coords = []
-
-		tname = 'conn_'+str(count)+'.json'
-		with open(outdir+'/'+tname,'w') as out_f:
-			json.dump(ofib[i-1],out_f)
+		coords.append(ofib[i-1])
+		
+		if jj == 50:	
+			tname = 'conn_'+str(count)+'.json'
+			with open(outdir+'/'+tname,'w') as out_f:
+				json.dump(coords,out_f)
 		jj = jj+1
 
 	# total index
