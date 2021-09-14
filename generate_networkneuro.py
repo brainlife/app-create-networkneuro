@@ -31,6 +31,8 @@ def generate_networkneuro():
 	# identify label nodes and names
 	print('grabbing node information, including streamline assignments and unique edges')
 	label_nodes = [ f['voxel_value'] for f in labels ]
+	if isinstance(label_nodes[0],str):
+		label_nodes = [ int(f) for f in label_nodes ]
 	label_names = [ f['name'] for f in labels ]
 
 	# load assignments csv indicating the roi pair for each streamline
