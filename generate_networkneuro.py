@@ -58,7 +58,7 @@ def generate_networkneuro():
 			if list(unique_edges_ordered[f]) not in unique_edges:
 				unique_edges.append(list(unique_edges_ordered[f]))
 	unique_edges = np.sort(unique_edges)
-	print('node information loaded')
+	print('node information loaded - '+str(len(unique_edges))+' unique edges found')
 
 	# load conmats
 	print('loading conmats')
