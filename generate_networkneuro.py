@@ -57,7 +57,11 @@ def generate_networkneuro():
 		else:
 			if list(unique_edges_ordered[f]) not in unique_edges:
 				unique_edges.append(list(unique_edges_ordered[f]))
-	unique_edges = np.sort(unique_edges)
+	tmpdf = pd.DataFrame(columns={'pair1','pair2'})
+	tmpdf['pair1'] = [ f[0] for f in unique_edges ]
+	tmpdf['pair2'] = [ f[1] for f in unique_edges ]
+	tmpdf = tmpdf.sort_values(by=['pair1','pair2'])
+	unique_edges = tmpdf.values
 	print('node information loaded - '+str(len(unique_edges))+' unique edges found')
 
 	# load conmats
