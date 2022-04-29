@@ -52,7 +52,8 @@ def generate_networkneuro():
 	conmats = ['count','length','density','denlen']
 	conmats_dict = {}
 	for i in conmats:
-		conmats_dict[i] = pd.read_csv(config[i],header=None).values
+		path = config[i]
+		conmats_dict[i] = pd.read_csv(path,header=None).values
 	print('conmats loaded')
 
 	# load wholebrain tractogram in parc space
