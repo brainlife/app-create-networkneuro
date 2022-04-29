@@ -94,8 +94,8 @@ def generate_networkneuro():
 
 		# store node names
 		tmp = {}
-		tmp['roi1'] = [ int(f['label']) for f in labels if int(f['voxel_value']) == ridx1 ][0]
-		tmp['roi2'] = [ int(f['label']) for f in labels if int(f['voxel_value']) == ridx2 ][0]
+		tmp['roi1'] = ridx1
+		tmp['roi2'] = ridx2
 
 		# grab weights
 		tmp['weights'] = {}
