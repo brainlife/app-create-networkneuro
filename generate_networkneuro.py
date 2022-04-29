@@ -52,7 +52,7 @@ def generate_networkneuro():
 	conmats = ['count','length','density','denlen']
 	conmats_dict = {}
 	for i in conmats:
-		path = config[i]
+		path = config[i]+'/correlation.csv'
 		conmats_dict[i] = pd.read_csv(path,header=None).values
 	print('conmats loaded')
 
