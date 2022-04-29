@@ -50,8 +50,13 @@ You can submit this App online at [https://doi.org/https://doi.org/10.25663/brai
 {
 	"tract": "/input/track/track.tck",
 	"parc": "/input/parc/parc.nii.gz",
-	"key": "/input/parc/key.txt",
-	"raw_netmat": "/input/raw_netmat"
+	"label": "/input/parc/label.json",
+	"index":	"/input/labels/index.csv",
+	"names":	"/input/labels/names.csv",
+	"count":	"/input/count_cm/csv/correlation.csv",
+	"density":	"/input/density_cm/csv/correlation.csv",
+	"length":	"/input/length_cm/csv/correlation.csv",
+	"denlen":	"/input/denlen_cm/csv/correlation.csv"
 }
 ```
 
@@ -68,7 +73,7 @@ bl dataset download
 
 3. Launch the App by executing 'main'
 
-```bash 
+```bash
 ./main
 ```
 
@@ -88,11 +93,6 @@ This App only requires [singularity](https://www.sylabs.io/singularity/) to run.
 - python3: https://www.python.org/
 - numpy: https://numpy.org/
 - nibabel: https://nipy.org/nibabel/
-- vistasoft: https://github.com/vistalab/vistasoft
-- matlab: https://www.mathworks.com/products/matlab.html
-- jsonlab: https://github.com/fangq/jsonlab
-- fine: https://github.com/bcmcpher/fine
-- wma_tools: https://github.com/DanNBullock/wma_tools
 - dipy: https://dipy.org/
 
 #### MIT Copyright (c) 2020 brainlife.io The University of Texas at Austin and Indiana University
