@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 import nibabel as nib
 from dipy.io.streamline import load_tractogram
-	
+
 def generate_networkneuro():
 
 	# load config
@@ -36,40 +36,23 @@ def generate_networkneuro():
 	label_names = [ f['name'] for f in labels ]
 
 	# load assignments csv indicating the roi pair for each streamline
-	assignments = pd.read_csv('assignments.csv',header=None)
-	assignments.rename(columns={0: 'pair1', 1: 'pair2'},inplace=True)
-	assignments = assignments.loc[(assignments['pair1'] != 0) & (assignments['pair2'] != 0)]
-	assignments = assignments.loc[(assignments['pair1'].isin(label_nodes)) & (assignments['pair2'].isin(label_nodes))]
-	assignments = assignments.loc[assignments['pair1'] != assignments['pair2']]
-	assignments = assignments.sort_values(by=['pair1','pair2'])
+	assignments_index = pd.read_csv(config['index'],header=None).rename(columns={0: "index"})
+	assignments_names = pd.read_csv(config['names'],header=None).rename(columns={0: "names"})
+	assignments = pd.concat([assignments_index, assignments_names], axis=1)
+	assignments.to_csv('./netneuro/output/assignments.csv',index=False)
 
-	# grab node labels
-	node_labels = np.sort(assignments['pair1'].unique())
+	# identify unique node pairings
+	unique_edges = [ [int(f.split('_')[0]),int(f.split('_')[1])] for f in assignments.loc[assignments["names"] != "not-classified"].names.unique().tolist() ]
 
 	# generate edge inices assignemnts
 	streams_indices = assignments.index.tolist()
-	unique_edges_unclean = assignments.groupby(['pair1','pair2']).count().index.values
-	unique_edges_ordered = np.sort([ (f[1],f[0]) if f[0] > f[1] else f for f in unique_edges_unclean ])
-	unique_edges = []
-	for f in range(len(unique_edges_ordered)):
-		if f == 0:
-			unique_edges.append(list(unique_edges_ordered[f]))
-		else:
-			if list(unique_edges_ordered[f]) not in unique_edges:
-				unique_edges.append(list(unique_edges_ordered[f]))
-	tmpdf = pd.DataFrame(columns={'pair1','pair2'})
-	tmpdf['pair1'] = [ f[0] for f in unique_edges ]
-	tmpdf['pair2'] = [ f[1] for f in unique_edges ]
-	tmpdf = tmpdf.sort_values(by=['pair1','pair2'])
-	unique_edges = tmpdf.values
-	print('node information loaded - '+str(len(unique_edges))+' unique edges found')
 
 	# load conmats
 	print('loading conmats')
 	conmats = ['count','length','density','denlen']
 	conmats_dict = {}
 	for i in conmats:
-		conmats_dict[i] = pd.read_csv('./output/'+i+'.csv',header=None).values
+		conmats_dict[i] = pd.read_csv(config[i],header=None).values
 	print('conmats loaded')
 
 	# load wholebrain tractogram in parc space
@@ -90,8 +73,9 @@ def generate_networkneuro():
 	print('building networkneuro data structures')
 	for i in unique_edges:
 
+		combined_name = str(i[0])+'_'+str(i[1])
 		# grab the edge information from assignments
-		st_ind = assignments.loc[(assignments['pair1'] == i[0]) & (assignments['pair2'] == i[1]) | (assignments['pair1'] == i[1]) & (assignments['pair2'] == i[0])]
+		st_ind = assignments.loc[assignments['names'] == combined_name]
 
 		# once 50 have been stored. this is to make loading for visualizer much quicker
 		if jj > 50:
@@ -111,7 +95,7 @@ def generate_networkneuro():
 		tmp = {}
 		tmp['roi1'] = [ int(f['label']) for f in labels if int(f['voxel_value']) == ridx1 ][0]
 		tmp['roi2'] = [ int(f['label']) for f in labels if int(f['voxel_value']) == ridx2 ][0]
-		
+
 		# grab weights
 		tmp['weights'] = {}
 		tmp['weights']['density'] = conmats_dict['density'][ridx1-1][ridx2-1]
